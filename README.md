@@ -32,8 +32,17 @@ skills/brain-builder/
 
 ## Private brain data
 
-Job Hunt OS keeps private career state separate from the public skill source. The logical brain root is `.brain/`, which is ignored by Git by default.
+Job Hunt OS stores your private career brain locally by default under `.brain/`, which is ignored by Git.
 
-Brain Builder supports a simple local brain and a durable private Git-backed brain. Other skills should consume the same logical `.brain` interface without depending on the physical storage mechanism.
+Because this brain contains valuable career history that grows over time, we recommend backing it with durable private storage — for example, a private GitHub repository — so it is versioned, recoverable, and available across machines.
+
+The mental model is:
+
+```text
+Local .brain/      = working copy
+Private Git repo   = recommended durable home / backup
+```
+
+Other Job Hunt OS skills should consume the same logical `.brain` interface without depending on the physical storage mechanism.
 
 The initial brain is intentionally small and grows only as real workflows require more structure.
