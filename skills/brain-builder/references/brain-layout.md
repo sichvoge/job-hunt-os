@@ -1,13 +1,10 @@
 # Brain Storage Contract
 
-Brain Builder needs a private, durable place to store career source material and generated brain state.
+Brain Builder needs a private place to store career source material and generated brain state.
 
-The skill must support two storage modes:
+The brain is local by default. Because it contains valuable career history that grows over time, Brain Builder should recommend backing it with durable private storage — for example, a private GitHub repository — so it is versioned, recoverable, and available across machines.
 
-1. local private storage,
-2. private Git-backed storage.
-
-The user experience should stay the same regardless of storage mode.
+The user experience should stay the same regardless of how the brain is backed up or synchronized.
 
 ## Logical brain root
 
@@ -28,9 +25,9 @@ Recommended initial layout:
 
 Do not create additional files or directories until they are needed by a real workflow.
 
-## Local mode
+## Local brain
 
-In local mode, `.brain/` exists inside the Job Hunt OS working directory and must be excluded from Git.
+By default, `.brain/` exists inside the Job Hunt OS working directory and must be excluded from Git.
 
 The repository should include:
 
@@ -40,24 +37,29 @@ The repository should include:
 
 Brain Builder should warn if any `.brain` file is already tracked by Git.
 
-Local mode is simple but not durable by itself. The user should be told that local-only storage can be lost and does not automatically sync across machines.
+The local brain is the working copy used by Job Hunt OS. Local-only storage is convenient but can be lost and does not automatically provide history, backup, or synchronization across machines.
 
-## Private Git-backed mode
+## Recommended durable storage
 
-In Git-backed mode, the private brain is stored in a separate private repository or another private Git worktree.
-
-The public Job Hunt OS repository still presents the brain through the same logical `.brain` path. The exact implementation may use a symlink, configurable path, or another portable mechanism.
-
-Do not assume a second repository is mandatory. It is a durability option.
-
-Benefits include:
+Brain Builder should recommend backing the local brain with durable private storage. A private Git repository, such as a private GitHub repository, is the recommended initial approach because it provides:
 
 - history and rollback,
 - remote backup,
 - multi-machine sync,
 - visibility into how the brain evolved.
 
-The private repository must never be made public by Brain Builder.
+The mental model is:
+
+```text
+Local .brain/      = working copy
+Private Git repo   = recommended durable home / backup
+```
+
+The public Job Hunt OS repository should still present the brain through the same logical `.brain` path. The exact implementation may use a symlink, configurable path, worktree, or another portable mechanism.
+
+Durable private storage is recommended, but it must not be mandatory for bootstrap. A user should be able to start locally and configure durable storage later.
+
+Brain Builder must never make a private brain repository public.
 
 ## Storage setup behavior
 
@@ -66,8 +68,8 @@ When creating a new brain, do not block bootstrap on storage configuration unles
 If no storage preference exists:
 
 1. explain briefly that the brain contains private career data,
-2. default to a safe local private brain when appropriate,
-3. mention that a private Git-backed brain is available for durable history and backup,
+2. create or use a safe local private brain when appropriate,
+3. recommend durable private storage such as a private GitHub repository for backup, version history, and multi-machine access,
 4. let the user decide whether to configure durable storage now or later.
 
 Do not turn storage setup into a long onboarding flow.
